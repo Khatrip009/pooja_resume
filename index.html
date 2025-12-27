@@ -3,432 +3,547 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pooja Pankaj Khatri | Executive Educator & Visionary Administrator</title>
+    <title>Pooja Pankaj Khatri | Elite Educational Architect</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Bormioli:wght@700&family=Fraunces:opsz,wght@9..144,300;9..144,700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,900;1,6..96,400&family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary-gold: #c5a059;
-            --deep-slate: #1a1c1e;
-            --soft-cream: #fdfcf9;
-            --glass-white: rgba(255, 255, 255, 0.85);
+            --accent: #D4AF37;
+            --accent-light: #F1E5AC;
+            --bg: #0A0A0A;
+            --text: #F5F5F5;
+            --stone-dark: #1C1C1C;
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--soft-cream);
-            color: var(--deep-slate);
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        h1, h2, h3 { font-family: 'Fraunces', serif; }
+        .serif-elite { font-family: 'Bodoni Moda', serif; }
+        .playfair { font-family: 'Playfair Display', serif; }
 
-        #canvas-container {
+        /* Custom Cursor */
+        #cursor {
+            width: 20px; height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
             pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
         }
 
-        .gold-gradient-text {
-            background: linear-gradient(135deg, #8a6d3b 0%, #c5a059 50%, #8a6d3b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
         }
 
-        .glass-card {
-            background: var(--glass-white);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(197, 160, 89, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
-            transition: transform 0.4s ease, border 0.4s ease;
+        /* Kinetic Typography */
+        .marquee {
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            animation: marquee 30s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
-        .glass-card:hover {
-            border-color: var(--primary-gold);
-        }
-
+        /* Reveal Animation */
         .reveal {
             opacity: 0;
             transform: translateY(40px);
-            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .nav-pill {
-            position: relative;
-            transition: color 0.3s ease;
+        /* Gradient Text */
+        .gold-gradient {
+            background: linear-gradient(to right, #D4AF37, #F1E5AC, #D4AF37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .nav-pill::after {
-            content: '';
+
+        /* Timeline Connector */
+        .timeline-line {
             position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+        }
+
+        /* Scroll Progress */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0; height: 4px;
+            background: linear-gradient(to right, #D4AF37, #FFF);
+            z-index: 1000;
+            width: 0%;
+        }
+
+        /* Smooth Section Transitions */
+        section { position: relative; z-index: 10; }
+
+        .vcard-card {
+            background: radial-gradient(circle at top right, #2a2a2a, #000000);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        /* Skill Bar */
+        .skill-track {
             height: 2px;
-            background: var(--primary-gold);
-            transition: width 0.3s ease;
+            background: rgba(255,255,255,0.1);
+            width: 100%;
+            position: relative;
+            margin-top: 8px;
         }
-        .nav-pill:hover::after { width: 100%; }
-
-        .floating { animation: float 6s ease-in-out infinite; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        .skill-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 2s ease-in-out;
         }
-
-        .math-decoration {
-            font-family: 'serif';
-            font-style: italic;
-            opacity: 0.1;
-            position: absolute;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--soft-cream); }
-        ::-webkit-scrollbar-thumb { background: var(--primary-gold); border-radius: 10px; }
     </style>
 </head>
-<body>
+<body class="selection:bg-amber-900 selection:text-white">
 
-    <div id="canvas-container"></div>
+    <div id="progress-bar"></div>
+    <div id="cursor"></div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 bg-white/40 backdrop-blur-xl border-b border-stone-200">
-        <div class="max-w-7xl mx-auto px-8 h-24 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 border-2 border-amber-600 rounded-full flex items-center justify-center text-amber-700 font-bold text-xl">PK</div>
-                <div class="leading-none">
-                    <span class="block text-xl font-black tracking-tight uppercase">Pooja Khatri</span>
-                    <span class="text-[10px] font-bold text-amber-700 tracking-[0.2em] uppercase">Educational Leadership</span>
-                </div>
-            </div>
-            <div class="hidden lg:flex space-x-10 text-xs font-bold uppercase tracking-[0.15em] text-stone-500">
-                <a href="#vision" class="nav-pill hover:text-amber-800">Vision</a>
-                <a href="#leadership" class="nav-pill hover:text-amber-800">Leadership</a>
-                <a href="#pedagogy" class="nav-pill hover:text-amber-800">Pedagogy</a>
-                <a href="#academics" class="nav-pill hover:text-amber-800">Academics</a>
-                <a href="#contact" class="px-6 py-3 bg-stone-900 text-white rounded-full hover:bg-amber-700 transition-colors">Contact</a>
-            </div>
+    <nav class="fixed top-0 w-full z-[100] px-6 md:px-12 py-8 flex justify-between items-center mix-blend-difference">
+        <div class="text-2xl font-black tracking-tighter serif-elite text-white italic">PKK.</div>
+        <div class="hidden md:flex gap-10 text-[10px] font-bold uppercase tracking-[0.4em] text-white">
+            <a href="#about" class="hover:text-amber-500 transition-colors">Vision</a>
+            <a href="#experience" class="hover:text-amber-500 transition-colors">Legacy</a>
+            <a href="#pedagogy" class="hover:text-amber-500 transition-colors">Philosophy</a>
+            <a href="#credentials" class="hover:text-amber-500 transition-colors">Qualifications</a>
+            <button onclick="downloadResume()" class="border border-white/20 px-6 py-2 rounded-full hover:bg-white hover:text-black transition-all">Export Dossier</button>
         </div>
     </nav>
 
-    <main class="relative">
-        <!-- Hero Section -->
-        <section class="min-h-screen flex items-center pt-24 px-8 max-w-7xl mx-auto">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <div class="reveal">
-                    <div class="flex items-center gap-4 mb-8">
-                        <span class="h-[1px] w-12 bg-amber-600"></span>
-                        <span class="text-xs font-bold uppercase tracking-[0.3em] text-amber-700">Innovator in Education</span>
-                    </div>
-                    <h1 class="text-7xl lg:text-9xl font-light leading-[0.9] mb-8">
-                        The Art of <br><span class="italic gold-gradient-text font-bold">Teaching.</span>
-                    </h1>
-                    <p class="text-lg text-stone-600 leading-relaxed mb-12 max-w-md font-light">
-                        Merging 11 years of administrative excellence with a profound commitment to logical arithmetic and commercial mastery.
-                    </p>
-                    <div class="flex flex-wrap gap-6">
-                        <a href="#leadership" class="group flex items-center gap-4">
-                            <span class="w-16 h-16 rounded-full bg-stone-900 flex items-center justify-center text-white group-hover:bg-amber-600 transition-all">↓</span>
-                            <span class="font-bold uppercase text-xs tracking-widest">Explore Career</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="relative reveal delay-300">
-                    <div class="math-decoration text-9xl -top-20 -right-10">∫</div>
-                    <div class="math-decoration text-9xl bottom-0 -left-20">√</div>
-                    <div class="relative z-10 overflow-hidden rounded-[4rem] shadow-2xl border-[12px] border-white">
-                        <img src="profile.jpg" alt="Pooja Pankaj Khatri" class="w-full h-[600px] object-cover scale-105 hover:scale-100 transition-transform duration-1000" onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&q=80&w=800'">
-                    </div>
-                    <div class="absolute -bottom-10 -right-10 glass-card p-8 rounded-3xl floating max-w-[240px]">
-                        <p class="text-4xl font-bold gold-gradient-text mb-1">100%</p>
-                        <p class="text-xs font-bold text-stone-500 leading-tight uppercase tracking-tighter">Result record in HSC Commerce Department</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- Hero Section -->
+    <section class="h-screen flex flex-col justify-center items-center relative px-6 overflow-hidden">
+        <div class="absolute inset-0 opacity-10 pointer-events-none flex items-center justify-center">
+            <h1 class="serif-elite text-[40vw] leading-none select-none font-black">POOJA</h1>
+        </div>
+        
+        <div class="z-10 text-center">
+            <p class="text-xs font-bold uppercase tracking-[0.8em] text-amber-500 mb-8 reveal">The Gold Standard of Education</p>
+            <h1 class="serif-elite text-6xl md:text-[9rem] font-black leading-[0.9] mb-8 reveal">
+                Mastery in <br> <span class="italic font-light gold-gradient">Leadership.</span>
+            </h1>
+            <div class="h-[1px] w-24 bg-amber-500 mx-auto mb-8 reveal"></div>
+            <p class="max-w-2xl mx-auto text-stone-400 text-lg md:text-xl font-light leading-relaxed reveal">
+                Pooja Pankaj Khatri — A decade of architectural leadership in academics, from Bhavnagar’s legacy to Surat’s modern educational frontiers.
+            </p>
+        </div>
 
-        <!-- Visionary Narrative -->
-        <section id="vision" class="py-32 px-8 bg-stone-50">
-            <div class="max-w-4xl mx-auto text-center reveal">
-                <h2 class="text-5xl font-bold mb-12">The Mission to Serve India</h2>
-                <div class="space-y-8 text-xl text-stone-600 font-light leading-relaxed">
-                    <p>
-                        Education in India stands at a critical juncture where the transition from information to transformation is vital. My purpose is to cultivate an environment where a child’s intellectual curiosity is never dampened by the weight of a curriculum. I strive to build a foundation where <strong>logic replaces memorization</strong>.
-                    </p>
-                    <p>
-                        By offering specialized workshops and personal tuitions for students struggling with educational expenses, I aim to democratize high-quality pedagogy. Every child, regardless of their financial background, deserves to experience the "Eureka" moment of solving a complex equation or understanding a market concept.
-                    </p>
+        <div class="absolute bottom-12 flex flex-col items-center gap-4 reveal">
+            <div class="w-[1px] h-16 bg-gradient-to-b from-amber-500 to-transparent"></div>
+            <span class="text-[9px] tracking-[0.6em] uppercase text-stone-500">Explore Her Journey</span>
+        </div>
+    </section>
+
+    <!-- About & Purpose -->
+    <section id="about" class="py-32 px-6 md:px-12 bg-[#080808]">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
+            <div class="reveal">
+                <h2 class="text-xs font-bold uppercase tracking-[0.5em] text-amber-600 mb-6">/ Vision & Purpose</h2>
+                <h3 class="serif-elite text-5xl md:text-7xl mb-10 leading-tight">Elevating India’s <br><span class="italic">Intellectual Fabric.</span></h3>
+                <div class="space-y-8 text-stone-400 text-lg leading-relaxed">
+                    <p>My journey is fueled by a singular conviction: <span class="text-white italic">Education is the highest form of service.</span> From the precision of Mental Math at ALOHA to the strategic oversight of SanskarJivan School, my career has been a quest for excellence.</p>
+                    <p>I believe in a "Holistic Governance" model—where administrative rigor meets empathetic pedagogy. My purpose is to create environments where students don't just learn, but evolve into thinkers, and where faculty are empowered to become masters of their craft.</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- Experience & Leadership -->
-        <section id="leadership" class="py-32 px-8 max-w-7xl mx-auto">
-            <div class="mb-20 reveal">
-                <h2 class="text-xs font-bold uppercase tracking-[0.4em] text-amber-700 mb-4">Professional Milestone</h2>
-                <p class="text-4xl font-bold">Leadership & Administration</p>
-            </div>
-
-            <div class="space-y-10">
-                <!-- SanskarJivan -->
-                <div class="glass-card p-12 rounded-[3rem] reveal grid lg:grid-cols-3 gap-12">
-                    <div class="lg:border-r border-stone-200">
-                        <span class="text-sm font-bold text-amber-700 uppercase tracking-widest">2020 — 2024</span>
-                        <h3 class="text-3xl font-bold mt-2">Assistant Principal</h3>
-                        <p class="text-stone-500 font-bold mt-1">SanskarJivan School, Surat</p>
+                
+                <div class="mt-12 grid grid-cols-2 gap-8 border-t border-white/10 pt-12">
+                    <div>
+                        <p class="text-4xl font-black serif-elite text-white mb-2">11+</p>
+                        <p class="text-xs uppercase tracking-widest text-stone-500">Years of Impact</p>
                     </div>
-                    <div class="lg:col-span-2 space-y-4">
-                        <p class="text-lg font-semibold text-stone-800">Strategic School Governance</p>
-                        <p class="text-stone-600 leading-relaxed">
-                            Spearheaded the administrative framework during a period of rapid educational digitization. My role involved overseeing 50+ faculty members, ensuring that the pedagogical standards remained uncompromised. I focused on "Empathetic Administration"—a style that balances strict institutional discipline with a deep understanding of teacher and student well-being.
-                        </p>
-                        <ul class="flex flex-wrap gap-3 mt-4">
-                            <li class="px-4 py-1 border border-stone-200 rounded-full text-xs font-bold uppercase">Staff Mentorship</li>
-                            <li class="px-4 py-1 border border-stone-200 rounded-full text-xs font-bold uppercase">Parental Liaison</li>
-                            <li class="px-4 py-1 border border-stone-200 rounded-full text-xs font-bold uppercase">Policy Design</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Sardar Patel -->
-                <div class="glass-card p-12 rounded-[3rem] reveal grid lg:grid-cols-3 gap-12">
-                    <div class="lg:border-r border-stone-200">
-                        <span class="text-sm font-bold text-amber-700 uppercase tracking-widest">2016 — 2017</span>
-                        <h3 class="text-3xl font-bold mt-2">Commerce Expert</h3>
-                        <p class="text-stone-500 font-bold mt-1">Sardar Patel High School</p>
-                    </div>
-                    <div class="lg:col-span-2 space-y-4">
-                        <p class="text-lg font-semibold text-stone-800">Higher Secondary Commerce Specialization</p>
-                        <p class="text-stone-600 leading-relaxed">
-                            Managed the specialized accounts and business studies curriculum for Bhavnagar’s future entrepreneurs. My teaching method focused on real-world application of commerce principles, leading to exceptionally high board exam performance and student engagement.
-                        </p>
+                    <div>
+                        <p class="text-4xl font-black serif-elite text-white mb-2">1500+</p>
+                        <p class="text-xs uppercase tracking-widest text-stone-500">Students Mentored</p>
                     </div>
                 </div>
             </div>
-        </section>
+            <div class="relative group reveal">
+                <div class="aspect-[4/5] overflow-hidden rounded-3xl glass p-3">
+                    <img src="profile_p.jpg" class="w-full h-full object-cover rounded-2xl grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" onerror="this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1976&auto=format&fit=crop'">
+                </div>
+                <!-- Float card -->
+                <div class="absolute -bottom-10 -left-10 glass p-8 rounded-2xl hidden md:block border-amber-500/20">
+                    <p class="serif-elite text-2xl italic">"Management is <br>human potential."</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <!-- Pedagogy & Advanced Math -->
-        <section id="pedagogy" class="py-32 px-8 bg-stone-900 text-white overflow-hidden relative">
-            <div class="math-decoration text-white opacity-5 text-[20rem] -top-20 -right-20">∑</div>
-            <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
-                <div class="reveal">
-                    <h2 class="text-xs font-bold uppercase tracking-[0.4em] text-amber-500 mb-6">Pedagogical Innovation</h2>
-                    <h3 class="text-5xl font-bold mb-8 leading-tight">ALOHA & Advanced <br>Mathematical Logic</h3>
-                    <p class="text-stone-400 text-lg leading-relaxed mb-10">
-                        My 2013-2016 tenure as an ALOHA trainer laid the foundation for my unique "Mental Visualization" teaching style. I don't just teach numbers; I teach students to see them. 
-                    </p>
-                    <div class="space-y-8">
-                        <div class="flex gap-6">
-                            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-500 font-bold">01</div>
-                            <div>
-                                <h4 class="font-bold text-xl mb-2">The Abacus Methodology</h4>
-                                <p class="text-stone-500 text-sm">Utilizing tactile tools to build mental photographic memory for rapid calculations.</p>
-                            </div>
+    <!-- Professional History - The Legacy -->
+    <section id="experience" class="py-32 bg-black overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="flex justify-between items-end mb-24 reveal">
+                <div>
+                    <h2 class="text-xs font-bold uppercase tracking-[0.5em] text-amber-600 mb-4">/ Professional Timeline</h2>
+                    <h3 class="serif-elite text-6xl md:text-8xl italic">The Legacy.</h3>
+                </div>
+                <p class="text-stone-500 max-w-xs text-right hidden md:block">A meticulously curated history of leadership and pedagogical advancement.</p>
+            </div>
+
+            <div class="relative pl-12 md:pl-0">
+                <div class="timeline-line hidden md:block left-1/2 -translate-x-1/2"></div>
+                
+                <div class="space-y-32">
+                    <!-- SanskarJivan -->
+                    <div class="relative grid md:grid-cols-2 gap-12 items-center reveal">
+                        <div class="md:text-right">
+                            <span class="text-amber-500 font-bold tracking-[0.4em] text-xs">2020 — 2024</span>
+                            <h4 class="serif-elite text-4xl mt-2 mb-4">Assistant Principal</h4>
+                            <p class="text-stone-300 font-bold text-sm mb-4 uppercase tracking-widest">SanskarJivan School, Adajan, Surat</p>
+                            <p class="text-stone-500 leading-relaxed md:pl-20">Chief administrative strategist managing a workforce of 50+ faculty members. Orchestrated the school's digital transformation during global shifts and ensured seamless operational continuity for 1000+ students.</p>
                         </div>
-                        <div class="flex gap-6">
-                            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-500 font-bold">02</div>
-                            <div>
-                                <h4 class="font-bold text-xl mb-2">Math-Phobia Eradication</h4>
-                                <p class="text-stone-500 text-sm">Independent workshops for Std 3-9+ designed to turn 'fear of numbers' into 'love for patterns'.</p>
-                            </div>
+                        <div class="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-amber-500 shadow-[0_0_20px_rgba(212,175,55,0.8)]"></div>
+                        <div class="glass p-8 rounded-2xl">
+                            <ul class="space-y-3 text-sm text-stone-400 italic">
+                                <li>• Institutional Governance & Compliance</li>
+                                <li>• Faculty Development & Mentorship</li>
+                                <li>• Crisis Management & Policy Design</li>
+                            </ul>
                         </div>
                     </div>
-                </div>
-                <div class="grid grid-cols-2 gap-6 reveal delay-200">
-                    <div class="p-8 rounded-[2rem] bg-white/5 border border-white/10 backdrop-blur-sm">
-                        <p class="text-3xl font-bold text-amber-500 mb-4">∞</p>
-                        <h5 class="font-bold mb-2">Infinite Focus</h5>
-                        <p class="text-xs text-stone-500 leading-relaxed">Concentration building through advanced arithmetic visualization.</p>
-                    </div>
-                    <div class="p-8 rounded-[2rem] bg-white/5 border border-white/10 backdrop-blur-sm mt-12">
-                        <p class="text-3xl font-bold text-amber-500 mb-4">π</p>
-                        <h5 class="font-bold mb-2">Precision Skills</h5>
-                        <p class="text-xs text-stone-500 leading-relaxed">Speed and accuracy training derived from Global Abacus standards.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Academics Section -->
-        <section id="academics" class="py-32 px-8 max-w-7xl mx-auto">
-            <div class="text-center mb-20 reveal">
-                <h2 class="text-xs font-bold uppercase tracking-[0.4em] text-amber-700 mb-4">Qualifications</h2>
-                <p class="text-4xl font-bold">Academic Portfolio</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Cert 1 -->
-                <div class="glass-card p-6 rounded-[2rem] group reveal">
-                    <div class="h-64 rounded-2xl overflow-hidden mb-6 bg-stone-100 relative">
-                        <img src="TYBCOM.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/400x300?text=B.Com+Degree'">
-                        <div class="absolute inset-0 bg-amber-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                            <span class="text-white text-xs font-bold uppercase tracking-widest">Saurashtra University</span>
+                    <!-- Independent Workshops -->
+                    <div class="relative grid md:grid-cols-2 gap-12 items-center reveal">
+                        <div class="order-2 md:order-1 glass p-8 rounded-2xl">
+                            <p class="text-stone-300 text-sm leading-relaxed italic">"Developing mathematical intuition in young minds requires a blend of Vedic precision and modern logic."</p>
+                        </div>
+                        <div class="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-amber-500"></div>
+                        <div class="order-1 md:order-2">
+                            <span class="text-amber-500 font-bold tracking-[0.4em] text-xs">2019 — PRESENT</span>
+                            <h4 class="serif-elite text-4xl mt-2 mb-4">Mathematics Architect</h4>
+                            <p class="text-stone-300 font-bold text-sm mb-4 uppercase tracking-widest">Specialized Independent Workshops</p>
+                            <p class="text-stone-500 leading-relaxed md:pr-20">Pioneering specialized math modules for grades 3 to 9+. Focus on removing 'Math Phobia' through visual logic and speed arithmetic techniques.</p>
                         </div>
                     </div>
-                    <h4 class="text-xl font-bold mb-1">M.Com & B.Com</h4>
-                    <p class="text-stone-500 text-sm font-bold uppercase tracking-tighter">Master of Commerce</p>
-                </div>
 
-                <!-- Cert 2 -->
-                <div class="glass-card p-6 rounded-[2rem] group reveal delay-100">
-                    <div class="h-64 rounded-2xl overflow-hidden mb-6 bg-stone-100 relative">
-                        <img src="HSC.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/400x300?text=HSC+Passing'">
-                        <div class="absolute inset-0 bg-amber-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                            <span class="text-white text-xs font-bold uppercase tracking-widest">HSC Achievement</span>
+                    <!-- Sardar Patel -->
+                    <div class="relative grid md:grid-cols-2 gap-12 items-center reveal">
+                        <div class="md:text-right">
+                            <span class="text-amber-500 font-bold tracking-[0.4em] text-xs">2016 — 2017</span>
+                            <h4 class="serif-elite text-4xl mt-2 mb-4">Higher Secondary Educator</h4>
+                            <p class="text-stone-300 font-bold text-sm mb-4 uppercase tracking-widest">Sardar Patel High School, Bhavnagar</p>
+                            <p class="text-stone-500 leading-relaxed md:pl-20">Specialized in the Commerce Department. Led students through critical HSC board preparations for Accounts and Business Administration with a 100% success rate.</p>
+                        </div>
+                        <div class="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-amber-500"></div>
+                        <div class="glass p-8 rounded-2xl">
+                            <p class="text-stone-300 text-sm">Successfully decoded complex commercial theories into actionable board exam strategies.</p>
                         </div>
                     </div>
-                    <h4 class="text-xl font-bold mb-1">HSC & SSC</h4>
-                    <p class="text-stone-500 text-sm font-bold uppercase tracking-tighter">Secondary & Higher Secondary</p>
-                </div>
 
-                <!-- Cert 3 -->
-                <div class="glass-card p-6 rounded-[2rem] group reveal delay-200">
-                    <div class="h-64 rounded-2xl overflow-hidden mb-6 bg-stone-100 relative">
-                        <img src="workshop.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/400x300?text=Workshop+Event'">
+                    <!-- ALOHA -->
+                    <div class="relative grid md:grid-cols-2 gap-12 items-center reveal">
+                        <div class="order-2 md:order-1 glass p-8 rounded-2xl">
+                            <p class="text-stone-300 text-sm">Global certification in Mental Arithmetic (Abacus) Training.</p>
+                        </div>
+                        <div class="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-amber-500"></div>
+                        <div class="order-1 md:order-2">
+                            <span class="text-amber-500 font-bold tracking-[0.4em] text-xs">2013 — 2016</span>
+                            <h4 class="serif-elite text-4xl mt-2 mb-4">Senior ALOHA Trainer</h4>
+                            <p class="text-stone-300 font-bold text-sm mb-4 uppercase tracking-widest">ALOHA International, Bhavnagar</p>
+                            <p class="text-stone-500 leading-relaxed md:pr-20">Certified mental math specialist. Mastered the art of whole-brain development, boosting the cognitive speed and concentration of young learners through Abacus.</p>
+                        </div>
                     </div>
-                    <h4 class="text-xl font-bold mb-1">Special Workshops</h4>
-                    <p class="text-stone-500 text-sm font-bold uppercase tracking-tighter">Event Gallery Since 2019</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Contact & Signature -->
-        <section id="contact" class="py-32 px-8 max-w-5xl mx-auto reveal">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold mb-4">Get In Touch</h2>
-                <p class="text-stone-500 font-light">Available for educational consulting and leadership collaborations.</p>
+    <!-- Skills & Pedagogy -->
+    <section id="pedagogy" class="py-32 px-6 md:px-12 bg-[#0A0A0A]">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-xs font-bold uppercase tracking-[0.5em] text-amber-600 mb-12">/ Skill Matrix & Methodology</h2>
+            
+            <div class="grid lg:grid-cols-3 gap-12">
+                <!-- Management -->
+                <div class="glass p-10 rounded-3xl reveal">
+                    <h3 class="serif-elite text-3xl mb-8 italic">Management Qualities</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest mb-2"><span>Institutional Ops</span><span>95%</span></div>
+                            <div class="skill-track"><div class="skill-fill" data-width="95%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest mb-2"><span>Staff Leadership</span><span>98%</span></div>
+                            <div class="skill-track"><div class="skill-fill" data-width="98%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest mb-2"><span>Conflict Resolution</span><span>90%</span></div>
+                            <div class="skill-track"><div class="skill-fill" data-width="90%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teaching Skills -->
+                <div class="glass p-10 rounded-3xl border-amber-500/20 reveal delay-100">
+                    <h3 class="serif-elite text-3xl mb-8 italic">Teaching Mastery</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest mb-2"><span>Mental Math / Abacus</span><span>100%</span></div>
+                            <div class="skill-track"><div class="skill-fill" data-width="100%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest mb-2"><span>Advanced Mathematics</span><span>96%</span></div>
+                            <div class="skill-track"><div class="skill-fill" data-width="96%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] font-bold uppercase tracking-widest mb-2"><span>Commercial Sciences</span><span>92%</span></div>
+                            <div class="skill-track"><div class="skill-fill" data-width="92%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Qualities -->
+                <div class="glass p-10 rounded-3xl reveal delay-200">
+                    <h3 class="serif-elite text-3xl mb-8 italic">Values & Ethics</h3>
+                    <div class="space-y-4 text-stone-400 text-sm">
+                        <p class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Uncompromising integrity in results</p>
+                        <p class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Continuous pedagogical evolution</p>
+                        <p class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Student-first decision making</p>
+                        <p class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Empathetic workforce management</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Qualifications -->
+    <section id="credentials" class="py-32 bg-stone-900/30">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 text-center">
+            <h2 class="text-xs font-bold uppercase tracking-[0.5em] text-amber-600 mb-16">/ Academic Credentials</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="glass py-12 px-6 rounded-2xl reveal">
+                    <h4 class="text-amber-500 font-black text-3xl mb-2">M.Com</h4>
+                    <p class="text-xs uppercase tracking-widest font-bold">Master of Commerce</p>
+                    <p class="text-[10px] text-stone-500 mt-2">Saurashtra University</p>
+                </div>
+                <div class="glass py-12 px-6 rounded-2xl reveal delay-100">
+                    <h4 class="text-amber-500 font-black text-3xl mb-2">B.Com</h4>
+                    <p class="text-xs uppercase tracking-widest font-bold">Bachelor of Commerce</p>
+                    <p class="text-[10px] text-stone-500 mt-2">Saurashtra University</p>
+                </div>
+                <div class="glass py-12 px-6 rounded-2xl reveal delay-200">
+                    <h4 class="text-white font-black text-3xl mb-2">HSC</h4>
+                    <p class="text-xs uppercase tracking-widest font-bold">Commerce Board</p>
+                    <p class="text-[10px] text-stone-500 mt-2">Passed with Distinction</p>
+                </div>
+                <div class="glass py-12 px-6 rounded-2xl reveal delay-300">
+                    <h4 class="text-white font-black text-3xl mb-2">SSC</h4>
+                    <p class="text-xs uppercase tracking-widest font-bold">Secondary Board</p>
+                    <p class="text-[10px] text-stone-500 mt-2">Saurashtra University Region</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personal Profile (vCard) -->
+    <section class="py-40 px-6">
+        <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center reveal">
+            <div class="vcard-card p-12 rounded-[3rem] border shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-amber-500/5 blur-[100px]"></div>
+                <h3 class="serif-elite text-4xl mb-12 gold-gradient">Pooja Pankaj Khatri</h3>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center gap-6">
+                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-amber-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase font-black text-stone-500">Direct Connect</p>
+                            <p class="text-xl font-bold">+91 63523 72744</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-amber-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase font-black text-stone-500">Residence</p>
+                            <p class="text-xl font-bold">Adajan, Surat, Gujarat</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 flex gap-4">
+                    <div class="px-4 py-2 bg-white/5 rounded-lg text-[10px] uppercase tracking-widest">Reading</div>
+                    <div class="px-4 py-2 bg-white/5 rounded-lg text-[10px] uppercase tracking-widest">Classical Music</div>
+                    <div class="px-4 py-2 bg-white/5 rounded-lg text-[10px] uppercase tracking-widest">Puzzles</div>
+                </div>
             </div>
             
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="space-y-8">
-                    <div class="flex items-center gap-6">
-                        <div class="w-16 h-16 rounded-3xl bg-amber-100 flex items-center justify-center text-amber-700 text-2xl">📞</div>
-                        <div>
-                            <p class="text-xs font-bold text-stone-400 uppercase tracking-widest">Call Directly</p>
-                            <p class="text-xl font-bold text-stone-900">+91 63523 72744</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-6">
-                        <div class="w-16 h-16 rounded-3xl bg-amber-100 flex items-center justify-center text-2xl">📍</div>
-                        <div>
-                            <p class="text-xs font-bold text-stone-400 uppercase tracking-widest">Office Address</p>
-                            <p class="text-sm font-medium text-stone-900">33, Sant Tukaram Society - 2, Palanpur Jakatnaka, Surat</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card p-10 rounded-[3rem]">
-                    <div class="text-center space-y-4">
-                        <p class="text-stone-400 italic font-light">"Education is the movement from darkness to light."</p>
-                        <div class="h-[1px] w-12 bg-amber-600 mx-auto"></div>
-                        <p class="font-bold text-stone-900 uppercase tracking-[0.2em] text-xs">Pooja Pankaj Khatri</p>
-                    </div>
-                </div>
+            <div class="text-center md:text-left">
+                <h3 class="serif-elite text-5xl mb-6 italic">Secure Dossier</h3>
+                <p class="text-stone-500 mb-10 leading-relaxed">Scan the secure QR to instantly save her credentials to your executive contact list or download the full professional dossier for archival.</p>
+                <div id="qrcode" class="bg-white p-4 inline-block rounded-3xl mb-8"></div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <footer class="py-16 text-center border-t border-stone-200">
-        <p class="text-[10px] font-bold uppercase tracking-[0.5em] text-stone-400">Copyright © 2025 Pooja Khatri • Education Visionary</p>
-    </footer>
+    <!-- Marquee Footer -->
+    <div class="py-20 border-t border-white/5 overflow-hidden opacity-30">
+        <div class="marquee text-[5vw] serif-elite italic font-black text-white/10 flex gap-20">
+            <span>POOJA PANKAJ KHATRI</span>
+            <span>EXECUTIVE EDUCATION</span>
+            <span>ADMINISTRATIVE EXCELLENCE</span>
+            <span>POOJA PANKAJ KHATRI</span>
+        </div>
+    </div>
+
+    <!-- Hidden Resume Template for PDF -->
+    <div id="resume-container" class="hidden">
+        <div style="padding: 50px; font-family: 'Times New Roman', serif; background: white; color: black; line-height: 1.5;">
+            <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">
+                <h1 style="margin: 0; font-size: 28pt;">POOJA PANKAJ KHATRI</h1>
+                <p style="margin: 5px 0; letter-spacing: 2px;">ASSISTANT PRINCIPAL | EDUCATIONAL ARCHITECT</p>
+                <p>+91 63523 72744 | Adajan, Surat, Gujarat</p>
+            </div>
+
+            <h3 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">EXECUTIVE SUMMARY</h3>
+            <p>Dynamic and vision-driven Educational Leader with 11+ years of experience spanning across complex institutional management and high-precision pedagogy. Proven track record in orchestrating school operations, leading large faculty teams, and pioneering specialized mathematics workshops.</p>
+
+            <h3 style="border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px;">PROFESSIONAL EXPERIENCE</h3>
+            
+            <p><strong>Assistant Principal | SanskarJivan School, Surat | 2020 – 2024</strong></p>
+            <ul>
+                <li>Managed daily operations for 1000+ students and 50+ staff members.</li>
+                <li>Pioneered the digitization of student records and staff assessment modules.</li>
+            </ul>
+
+            <p><strong>Mathematics Consultant | Independent Workshops | 2019 – Present</strong></p>
+            <ul>
+                <li>Designed custom curricula for students of Std 3 to 9+ focusing on advanced skills.</li>
+            </ul>
+
+            <p><strong>Higher Secondary Teacher | Sardar Patel High School, Bhavnagar | 2016 – 2017</strong></p>
+            <ul>
+                <li>Lecturer for Accounts and Business Administration in the Commerce Department.</li>
+            </ul>
+
+            <p><strong>Senior Aloha Trainer | ALOHA International, Bhavnagar | 2013 – 2016</strong></p>
+            <ul>
+                <li>Certified Abacus and Mental Math expert. Focused on whole-brain development.</li>
+            </ul>
+
+            <h3 style="border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px;">ACADEMIC QUALIFICATIONS</h3>
+            <p>• <strong>M.Com</strong> (Master of Commerce) – Saurashtra University</p>
+            <p>• <strong>B.Com</strong> (Bachelor of Commerce) – Saurashtra University</p>
+            <p>• <strong>HSC & SSC</strong> – Secondary & Higher Secondary Education Boards</p>
+
+            <h3 style="border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px;">CORE COMPETENCIES</h3>
+            <p>Educational Governance, Institutional Policy Design, Whole-Brain Pedagogy, Advanced Mental Arithmetic, Strategic Personnel Management, Curriculum Innovation.</p>
+        </div>
+    </div>
 
     <script>
-        let scene, camera, renderer, nodes = [];
-        const container = document.getElementById('canvas-container');
+        // Custom Cursor Interaction
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
 
-        function init3D() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            container.appendChild(renderer.domElement);
-
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-            scene.add(ambientLight);
-            const pointLight = new THREE.PointLight(0xc5a059, 1);
-            pointLight.position.set(5, 5, 5);
-            scene.add(pointLight);
-
-            // Create Golden Nodes (Representing math/logic connections)
-            const geometry = new THREE.OctahedronGeometry(0.15, 0);
-            const material = new THREE.MeshPhongMaterial({ 
-                color: 0xc5a059, 
-                shininess: 100,
-                transparent: true,
-                opacity: 0.3
+        document.querySelectorAll('a, button, .work-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.width = '60px';
+                cursor.style.height = '60px';
+                cursor.style.backgroundColor = 'rgba(212,175,55,0.3)';
             });
-
-            for(let i=0; i<50; i++) {
-                const mesh = new THREE.Mesh(geometry, material);
-                mesh.position.set(
-                    (Math.random() - 0.5) * 25,
-                    (Math.random() - 0.5) * 20,
-                    (Math.random() - 0.5) * 10
-                );
-                mesh.userData = {
-                    rotSpeed: Math.random() * 0.02,
-                    floatSpeed: Math.random() * 0.005
-                };
-                nodes.push(mesh);
-                scene.add(mesh);
-            }
-
-            camera.position.z = 10;
-            animate();
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            nodes.forEach(n => {
-                n.rotation.x += n.userData.rotSpeed;
-                n.rotation.y += n.userData.rotSpeed;
-                n.position.y += Math.sin(Date.now() * 0.001 + n.position.x) * 0.002;
+            el.addEventListener('mouseleave', () => {
+                cursor.style.width = '20px';
+                cursor.style.height = '20px';
+                cursor.style.backgroundColor = '#D4AF37';
             });
-            if (renderer && scene && camera) {
-                renderer.render(scene, camera);
-            }
-        }
+        });
 
-        // Interaction Observer
+        // Scroll Progress Line
+        window.onscroll = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+
+            // Trigger Skill Animations
+            const skillSection = document.getElementById('pedagogy');
+            const rect = skillSection.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom >= 0) {
+                document.querySelectorAll('.skill-fill').forEach(bar => {
+                    bar.style.width = bar.getAttribute('data-width');
+                });
+            }
+        };
+
+        // Scroll Reveal Intersection Observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) entry.target.classList.add('active');
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
             });
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Resize
-        window.addEventListener('resize', () => {
-            if (camera && renderer) {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            }
-        });
+        // Simplified vCard to prevent QR code overflow error
+        const vcardData = "BEGIN:VCARD\nVERSION:3.0\nFN:Pooja Pankaj Khatri\nTITLE:Asst Principal\nTEL:+916352372744\nADR:;;Surat;Gujarat;India\nEND:VCARD";
 
-        window.addEventListener('DOMContentLoaded', init3D);
-
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth' });
+        try {
+            new QRCode(document.getElementById("qrcode"), {
+                text: vcardData,
+                width: 150,
+                height: 150,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L // Use lower error correction to handle more data safely
             });
-        });
+        } catch (e) {
+            console.error("QR Code Generation failed", e);
+            document.getElementById("qrcode").innerText = "Scan for Contact: +91 63523 72744";
+        }
+
+        // PDF Generation for Official Use
+        async function downloadResume() {
+            const element = document.getElementById('resume-container');
+            element.classList.remove('hidden');
+            
+            const options = {
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: 'Pooja_Khatri_Resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            try {
+                await html2pdf().set(options).from(element).save();
+            } finally {
+                element.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 </html>
